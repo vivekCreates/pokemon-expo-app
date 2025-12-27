@@ -6,9 +6,14 @@ interface Pokemon {
   name: string;
   url:string;
 }
+export interface PokemonShape {
+  name:string;
+  imageFront:string;
+  imageBack:string
+}
 
 export default function Index() {
-  const [pokemons, setPokemons] = useState<{name:string,imageFront:string,imageBack:string}[]>([]);
+  const [pokemons, setPokemons] = useState<PokemonShape[]>([]);
 
   useEffect(() => {
     async function fetchData() {
