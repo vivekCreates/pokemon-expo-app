@@ -1,13 +1,14 @@
+import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 
 interface Pokemon {
   name: string;
-  url: string; // image url
+  url:string;
 }
 
 export default function Index() {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const [pokemons, setPokemons] = useState<{name:string,imageFront:string,imageBack:string}[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,7 +25,8 @@ export default function Index() {
 
             return {
               name: pokemon.name,
-              url: details.sprites.front_default,
+              imageFront: details.sprites.front_default,
+              imageBack: details.sprites.back_default,
             };
           })
         );
@@ -44,29 +46,37 @@ export default function Index() {
       <View
         style={{
           flexDirection: "row",
-          flexWrap: "wrap",        // ✅ allows wrapping
+          flexWrap: "wrap",       
           justifyContent: "space-between",
-          padding: 10,
+          padding: 16,
         }}
       >
         {pokemons.map((pokemon, id) => (
+          <Link href={{pathname:"/detail",params:{name:pokemon.name}}} key={id} style={{marginBottom:10}}>
           <View
-            key={id}
             style={{
-              width: "48%",        // ✅ 2 columns
+              width: "100%",        
               backgroundColor: "lightblue",
               marginBottom: 10,
               alignItems: "center",
-              padding: 10,
+              padding: 14,
               borderRadius: 8,
+              height:250
             }}
           >
+            <Text style={{ marginBottom: 25 ,fontSize:22,fontWeight:"600"}}>{pokemon.name}</Text>
+            <View style={{width:"100%",alignItems:"center",justifyContent:"center",flexDirection:"row"}}>
             <Image
-              source={{ uri: pokemon.url }}
-              style={{ width: 120, height: 120 }}
+              source={{ uri: pokemon.imageFront }}
+              style={{ width: 150, height: 120 }}
             />
-            <Text style={{ marginTop: 5 }}>{pokemon.name}</Text>
+            <Image
+              source={{ uri: pokemon.imageBack }}
+              style={{ width: 150, height: 120 }}
+            />
+            </View>
           </View>
+           </Link>
         ))}
       </View>
     </ScrollView>
